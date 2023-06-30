@@ -1,10 +1,18 @@
-import { GalleryItems } from "./ImageGalleryItem.styled";
-export const ImageGalleryItem = ({images}) => {
+import { GalleryItems } from './ImageGalleryItem.styled';
+export const ImageGalleryItem = ({
+  id,
+  src,
+  tags,
+  imageModal,
+  toggleModal,
+}) => {
+  const onClick = () => {
+    toggleModal(imageModal);
+  };
+
   return (
-    images.map((image) => (
-      <GalleryItems key={image.id}>
-        <img src={image.webformatURL} alt={image.tags}/>
-      </GalleryItems>
-    ))
+    <GalleryItems key={id} onClick={onClick}>
+      <img src={src} alt={tags} />
+    </GalleryItems>
   );
 };

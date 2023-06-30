@@ -17,12 +17,14 @@ export class App extends Component {
     error: null,
     page: 1,
     showModal: false,
+    largeImage: '',
     status: 'idle',
   };
 
-  toggleModal = () => {
+  toggleModal = (largeImage) => {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
+      largeImage: largeImage,
     }))
   }
 
@@ -68,7 +70,7 @@ export class App extends Component {
   }
 
   render() {
-    const { status, error, images, page, total, showModal } = this.state;
+    const { status, error, images, page, total, showModal, largeImage } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
@@ -76,7 +78,7 @@ export class App extends Component {
         {status === 'pending' && <Loader />}
         {status === 'rejected' && <ErrorTitle message={error} />}
         {status === 'resolved' && (
-          <ImageGallery images={images}>
+          <ImageGallery images={images} toggleModal={this.toggleModal}>
             {page < Math.ceil(total / 12) ? (
               <LoadMore handleLoadMore={this.handleLoadMore} />
             ) : (
@@ -84,7 +86,7 @@ export class App extends Component {
             )}
           </ImageGallery>
         )}
-        {showModal && <Modal/>}
+        {showModal && <Modal image={largeImage}/>}
         
 
         <ToastContainer position="top-center" autoClose={2000} />
