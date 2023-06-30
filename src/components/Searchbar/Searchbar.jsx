@@ -1,19 +1,49 @@
-export const Searchbar = ({ onSubmit }) => {
-  return (
-    <header class="searchbar">
-      <form class="form">
-        <button type="submit" class="button">
-          <span class="button-label">Search</span>
-        </button>
+import { Component } from 'react';
+import { toast } from 'react-toastify';
+import { SearchForm, HeaderSearch } from './Searchbar.styled';
+import { BsSearch } from "react-icons/bs";
 
-        <input
-          class="input"
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </form>
-    </header>
-  );
-};
+export class Searchbar extends Component {
+  state = {
+    value: '',
+  };
+
+  handleNameChange = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+
+    if (this.state.value.trim() === '') {
+      toast.error('Enter a value');
+      return;
+    }
+
+    this.props.onSubmit(this.state.value);
+    this.setState({ value: '', });
+  };
+
+  render() {
+    const { value } = this.state;
+    return (
+      <HeaderSearch className="searchbar">
+        <SearchForm className="form" onSubmit={this.handleSubmit}>
+          <button type="submit" className="button">
+            <BsSearch/>
+          </button>
+
+          <input
+            className="input"
+            value={value}
+            onChange={this.handleNameChange}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </SearchForm>
+      </HeaderSearch>
+    );
+  }
+}
