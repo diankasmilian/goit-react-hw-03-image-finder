@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+export const GalleryContainer = styled.div`
+text-align: center;`
+
 export const Gallery = styled.ul`
   display: grid;
   max-width: calc(100vw - 48px);

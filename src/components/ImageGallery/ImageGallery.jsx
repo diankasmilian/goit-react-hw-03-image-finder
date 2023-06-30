@@ -1,11 +1,15 @@
+
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Gallery, GalleryContainer } from './ImageGallery.styled';
 
-import { Gallery } from './ImageGallery.styled';
-
-export const ImageGallery = ({images}) => {
+export const ImageGallery = ({ images, children }) => {
   return (
-    <Gallery>
-      <ImageGalleryItem images={images}/>
-    </Gallery>
+    <GalleryContainer>
+      <Gallery>
+        <ImageGalleryItem images={images} />
+      </Gallery>
+      {children}
+    </GalleryContainer>
+      
   );
 };
