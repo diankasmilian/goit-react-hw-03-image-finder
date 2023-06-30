@@ -7,6 +7,7 @@ import { Searchbar } from 'components/Searchbar/Searchbar';
 import { Loader } from 'components/Loader/Loader';
 import { ErrorTitle } from 'components/ErrorTitle/ErrorTitle';
 import * as API from '../../services/image-api';
+import { Modal } from 'components/Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -15,8 +16,15 @@ export class App extends Component {
     total: 0,
     error: null,
     page: 1,
+    showModal: false,
     status: 'idle',
   };
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal,
+    }))
+  }
 
   handleFormSubmit = value => {
     this.setState({ value: value });
@@ -60,7 +68,7 @@ export class App extends Component {
   }
 
   render() {
-    const { status, error, images, page, total } = this.state;
+    const { status, error, images, page, total, showModal } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
@@ -76,6 +84,8 @@ export class App extends Component {
             )}
           </ImageGallery>
         )}
+        {showModal && <Modal/>}
+        
 
         <ToastContainer position="top-center" autoClose={2000} />
       </>

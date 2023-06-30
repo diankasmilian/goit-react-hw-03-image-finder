@@ -1,9 +1,11 @@
+import { Overlay, ModalWindow } from "./Modal.styled"
+
 export const Modal = () => {
    return (
-      <div className="overlay">
-  <div className="modal">
+      <Overlay>
+  <ModalWindow >
     <img src="" alt="" />
-  </div>
-</div>
+  </ModalWindow>
+</Overlay>
    )
 }
