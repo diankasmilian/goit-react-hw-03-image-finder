@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import { GalleryItems } from './ImageGalleryItem.styled';
+
 export const ImageGalleryItem = ({
   id,
   src,
@@ -15,4 +17,12 @@ export const ImageGalleryItem = ({
       <img src={src} alt={tags} />
     </GalleryItems>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  src: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  imageModal: PropTypes.string.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };

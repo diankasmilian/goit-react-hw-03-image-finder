@@ -9,7 +9,7 @@ export const Loader = () => {
       wrapperStyle={{
         margin: 'auto',
         display: 'flex',
-        marginTop: '50px'
+        marginTop: '50px',
       }}
       wrapperClass="MagnifyingGlass-wrapper"
       glassColor="#c0efff"

@@ -1,5 +1,6 @@
 import { Overlay, ModalWindow } from './Modal.styled';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -19,11 +20,11 @@ export class Modal extends Component {
     }
   };
 
-  handleClickBackdrop = (e) => {
-if(e.target === e.currentTarget) {
-   this.props.onClose()
-}
-  }
+  handleClickBackdrop = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
+  };
 
   render() {
     return createPortal(
@@ -36,3 +37,8 @@ if(e.target === e.currentTarget) {
     );
   }
 }
+
+Modal.propTypes = {
+  image: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
