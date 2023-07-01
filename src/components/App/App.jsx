@@ -21,18 +21,27 @@ export class App extends Component {
     status: 'idle',
   };
 
-  toggleModal = (largeImage) => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal,
-      largeImage: largeImage,
-    }))
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.value !== this.state.value ||
+      prevState.page !== this.state.page
+    ) {
+      this.searchImage(this.state.value, this.state.page);
+    }
   }
+
+  toggleModal = largeImage => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      largeImage: largeImage,
+    }));
+  };
 
   handleFormSubmit = value => {
     this.setState({ value: value });
   };
 
-  handleLoadMore = (e) => {
+  handleLoadMore = e => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
@@ -60,17 +69,9 @@ export class App extends Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.value !== this.state.value ||
-      prevState.page !== this.state.page
-    ) {
-      this.searchImage(this.state.value, this.state.page);
-    }
-  }
-
   render() {
-    const { status, error, images, page, total, showModal, largeImage } = this.state;
+    const { status, error, images, page, total, showModal, largeImage } =
+      this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
@@ -86,8 +87,7 @@ export class App extends Component {
             )}
           </ImageGallery>
         )}
-        {showModal && <Modal image={largeImage}/>}
-        
+        {showModal && <Modal image={largeImage} onClose={this.toggleModal} />}
 
         <ToastContainer position="top-center" autoClose={2000} />
       </>

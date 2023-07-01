@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
+import { propTypes } from 'prop-types';
 import { SearchForm, HeaderSearch } from './Searchbar.styled';
-import { BsSearch } from "react-icons/bs";
+import { BsSearch } from 'react-icons/bs';
 
 export class Searchbar extends Component {
   state = {
@@ -21,7 +22,7 @@ export class Searchbar extends Component {
     }
 
     this.props.onSubmit(this.state.value);
-    this.setState({ value: '', });
+    this.setState({ value: '' });
   };
 
   render() {
@@ -30,7 +31,7 @@ export class Searchbar extends Component {
       <HeaderSearch className="searchbar">
         <SearchForm className="form" onSubmit={this.handleSubmit}>
           <button type="submit" className="button">
-            <BsSearch/>
+            <BsSearch />
           </button>
 
           <input
@@ -47,3 +48,5 @@ export class Searchbar extends Component {
     );
   }
 }
+
+
