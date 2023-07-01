@@ -19,7 +19,7 @@ export class App extends Component {
     page: 1,
     showModal: false,
     largeImage: '',
-    status: 'idle',
+    loader: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -42,15 +42,9 @@ export class App extends Component {
     this.setState({
       showModal: false,
       largeImage: '',
-    })
-  }
+    });
+  };
 
-  // toggleModal = largeImage => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //     largeImage: largeImage,
-  //   }));
-  // };
 
   handleFormSubmit = value => {
     this.setState({ value: value, page: 1, images: [] });
@@ -61,37 +55,37 @@ export class App extends Component {
   };
 
   searchImage = async (value, page) => {
-    this.setState({ status: 'pending' });
+    this.setState({ loader: true });
     try {
       const { hits, totalHits } = await API.getImage(value, page);
 
       if (hits.length === 0) {
         return this.setState({
           error: '😥OOPS... undefined image',
-          status: 'rejected',
+          loader: false,
         });
       }
 
       this.setState(prevState => ({
         images: [...prevState.images, ...hits],
         total: totalHits,
-        status: 'resolved',
+        error: null,
+        loader: false,
       }));
     } catch (error) {
-      this.setState({ error: error.message, status: 'rejected' });
+      this.setState({ error: error.message });
     }
   };
 
   render() {
-    const { status, error, images, page, total, showModal, largeImage } =
+    const { loader, error, images, page, total, showModal, largeImage } =
       this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        {status === 'idle' && ''}
-        {status === 'pending' && <Loader />}
-        {status === 'rejected' && <ErrorTitle message={error} />}
-        {status === 'resolved' && (
+        {loader && <Loader />}
+        {error && <ErrorTitle message={error} />}
+        {images.length !== 0 && (
           <>
             <ImageGallery images={images} openModal={this.onOpenModal} />
             {page < Math.ceil(total / 12) && (
@@ -99,7 +93,9 @@ export class App extends Component {
             )}
           </>
         )}
-        {showModal && <Modal image={largeImage} onCloseModal={this.onCloseModal} />}
+        {showModal && (
+          <Modal image={largeImage} onCloseModal={this.onCloseModal} />
+        )}
 
         <ToastContainer position="top-center" autoClose={2000} />
       </Container>
