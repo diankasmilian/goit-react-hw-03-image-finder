@@ -45,7 +45,6 @@ export class App extends Component {
     });
   };
 
-
   handleFormSubmit = value => {
     this.setState({ value: value, page: 1, images: [] });
   };
