@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const GalleryContainer = styled.div`
+padding-top: 80px;
 text-align: center;`
 
 export const Gallery = styled.ul`

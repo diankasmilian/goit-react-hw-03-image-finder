@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Container } from './App.styled';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { LoadMore } from 'components/Button/Button';
 import { Searchbar } from 'components/Searchbar/Searchbar';
@@ -30,15 +31,29 @@ export class App extends Component {
     }
   }
 
-  toggleModal = largeImage => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
+  onOpenModal = largeImage => {
+    this.setState({
+      showModal: true,
       largeImage: largeImage,
-    }));
+    });
   };
 
+  onCloseModal = () => {
+    this.setState({
+      showModal: false,
+      largeImage: '',
+    })
+  }
+
+  // toggleModal = largeImage => {
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //     largeImage: largeImage,
+  //   }));
+  // };
+
   handleFormSubmit = value => {
-    this.setState({ value: value });
+    this.setState({ value: value, page: 1, images: [] });
   };
 
   handleLoadMore = e => {
@@ -48,11 +63,9 @@ export class App extends Component {
   searchImage = async (value, page) => {
     this.setState({ status: 'pending' });
     try {
-      const data = await API.getImage(value, page);
-      const hits = data.hits;
-      const total = data.total;
+      const { hits, totalHits } = await API.getImage(value, page);
 
-      if (total === 0) {
+      if (hits.length === 0) {
         return this.setState({
           error: '😥OOPS... undefined image',
           status: 'rejected',
@@ -61,7 +74,7 @@ export class App extends Component {
 
       this.setState(prevState => ({
         images: [...prevState.images, ...hits],
-        total: total,
+        total: totalHits,
         status: 'resolved',
       }));
     } catch (error) {
@@ -73,24 +86,23 @@ export class App extends Component {
     const { status, error, images, page, total, showModal, largeImage } =
       this.state;
     return (
-      <>
+      <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
         {status === 'idle' && ''}
         {status === 'pending' && <Loader />}
         {status === 'rejected' && <ErrorTitle message={error} />}
         {status === 'resolved' && (
-          <ImageGallery images={images} toggleModal={this.toggleModal}>
-            {page < Math.ceil(total / 12) ? (
+          <>
+            <ImageGallery images={images} openModal={this.onOpenModal} />
+            {page < Math.ceil(total / 12) && (
               <LoadMore handleLoadMore={this.handleLoadMore} />
-            ) : (
-              ''
             )}
-          </ImageGallery>
+          </>
         )}
-        {showModal && <Modal image={largeImage} onClose={this.toggleModal} />}
+        {showModal && <Modal image={largeImage} onCloseModal={this.onCloseModal} />}
 
         <ToastContainer position="top-center" autoClose={2000} />
-      </>
+      </Container>
     );
   }
 }
